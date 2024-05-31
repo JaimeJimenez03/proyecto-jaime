@@ -1,0 +1,13 @@
+.header {
+    margin-top: 20px;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+h1 {
+    text-align: center;
+    margin-top: 40px;
+}

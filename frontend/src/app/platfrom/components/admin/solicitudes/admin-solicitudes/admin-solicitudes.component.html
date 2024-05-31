@@ -1,0 +1,68 @@
+<h3 class="text-center mt-5 mb-5">Solicitudes</h3>
+<div class="">
+    <p-table [value]="listaSolicitudes" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'width': '80%', 'margin-left': '8%'}"
+        currentPageReportTemplate="Mostrando del {first} al {last} ({totalRecords} Solicitudes totales)"
+        class="table table-hover table-striped text-center">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:15%">NOMBRE DE SOLICITUD</th>
+
+                <th pSortableColumn="ciudad" style="width:15%">CIUDAD <p-sortIcon field="ciudad"></p-sortIcon></th>
+
+                <th pSortableColumn="usuario.nombre_usuario" style="width:15%">NOMBRE DE USUARIO <p-sortIcon
+                        field="usuario.nombre_usuario"></p-sortIcon></th>
+
+                <th pSortableColumn="usuario.email" style="width:15%">CORREO ELECTRÓNICO <p-sortIcon
+                        field="usuario.email"></p-sortIcon></th>
+
+                <th style="width:3%"></th>
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-solicitud>
+            <tr>
+
+                <td class="text-center">{{solicitud.nombre}}</td>
+                <td class="text-center">{{solicitud.ciudad}}</td>
+                <td class="text-center">{{solicitud.usuario.username}}</td>
+                <td class="text-center">{{solicitud.usuario.email}}</td>
+                <td class="text-center">
+                    <button (click)="abrirModal(solicitud)"
+                        style="color: rgb(56, 189, 255); background: none; border: none;"><i
+                            class="pi pi-minus"></i></button>
+                </td>
+
+            </tr>
+        </ng-template>
+        >
+    </p-table>
+</div>
+
+@if (showModal) {
+<div class=".sobre-modal" [@fadeInOut]="true">
+    <div class="contenido-modal">
+        <span (click)="cerrarModal()" class="close-button"><i class="pi pi-times"></i></span>
+        <div class="modal-header">
+            <h2 class="titulo-modal text-center" style="color: blue;">Eliminar Usuario</h2>
+        </div>
+        <div class="cuerpo-modal text-center">
+            <div class=" d-flex text-center">
+                <div class="confirm">
+                    <div class="icon-question">
+                        <i class="pi pi-question"></i>
+                    </div>
+                    <h5>¿Está seguro de querer eliminar la solicitud {{solicitud.nombre}}?</h5>
+                </div>
+            </div>
+            <div class="d-flex">
+                <button style="margin-top: 50px; margin-right: 100px; margin-left: 60px; border-radius: 15px;"
+                    class="btn btn-primary" (click)="eliminarSolicitud(solicitud.id)">Confirmar</button>
+                <button style="margin-top: 50px; border-radius: 15px;" class="btn btn-danger"
+                    (click)="cerrarModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

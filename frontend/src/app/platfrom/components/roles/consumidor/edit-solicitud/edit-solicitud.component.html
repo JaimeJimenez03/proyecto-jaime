@@ -1,0 +1,35 @@
+<form #editSoli="ngForm" (ngSubmit)="onSubmit(solicitud)" [@fadeInOut]>
+    <input type="hidden" name="id" [(ngModel)]="solicitud.id">
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Editar Solicitud</h2>
+
+            </div>
+            <div class="modal-body">
+                <div class=" d-flex">
+                    <div class=" user-details-edit">
+                        <div style="margin-top: 50px; justify-content: center; align-items: center; display: flex;">
+                            <label for="concepto" class="mr-5"><strong>Nombre:</strong></label>
+                            <input type="text" class="form-edit" [(ngModel)]="solicitud.nombre" name="nombre" />
+                        </div>
+                        <div style="margin-top: 50px; justify-content: center; align-items: center; display: flex;">
+                            <label for="concepto" class="mr-5"><strong>Concepto:</strong></label>
+                            <textarea class="form-edit" [(ngModel)]="solicitud.concepto" name="concepto"
+                                rows="3"></textarea>
+                        </div>
+                        <div style="margin-top: 50px; justify-content: center; align-items: center; display: flex;">
+                            <label for="ciudad" class="mr-5"><strong>Ciudad:</strong></label>
+                            <input type="text" class="form-edit" [(ngModel)]="solicitud.ciudad" name="ciudad">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-accept mr-4">Editar</button>
+                <button (click)="cerrarForm()" class="btn btn-danger" type="button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</form>

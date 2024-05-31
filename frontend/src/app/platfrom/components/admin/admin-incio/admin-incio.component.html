@@ -1,0 +1,40 @@
+@if (usuarioLogueado != null && usuarioLogueado.role.id === 1) {
+<div class="header">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class=" mt-2 mb-3 text-center">
+            <p-menubar [model]="menuOptions"></p-menubar>
+        </div>
+    </div>
+</div>
+
+@if(!m_tablaActividades && !m_tablaUsuarios && !m_tablaSolicitudes && !m_tablaRoles){
+
+<div class="text-center mt-5">
+    <div>
+        <h2 class="mb-4">Bienvenido al Panel de Administrador {{usuarioLogueado.username}} </h2>
+        <h5>Seleccione una opción del menú para comenzar.</h5>
+    </div>
+</div>
+}
+
+@if (m_tablaUsuarios) {
+<app-admin-usuarios></app-admin-usuarios>
+
+}
+
+@if (m_tablaActividades) {
+<app-admin-actividades></app-admin-actividades>
+}
+
+
+
+@if (m_tablaSolicitudes) {
+<app-admin-solicitudes></app-admin-solicitudes>
+}
+
+@if (m_tablaRoles) {
+<app-admin-roles></app-admin-roles>
+}
+}@else {
+{{dondeVaMaquina()}}
+}

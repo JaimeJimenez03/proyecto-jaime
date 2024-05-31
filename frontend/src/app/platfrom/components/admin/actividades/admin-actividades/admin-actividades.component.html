@@ -1,0 +1,192 @@
+<h3 class="text-center mt-5 mb-5">Actividades</h3>
+<div class="">
+    <p-table [value]="listaActividades" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'width': '80%', 'margin-left': '8%'}"
+        currentPageReportTemplate="Mostrando del {first} al {last} ({totalRecords} Actividades totales)"
+        class="table table-hover table-striped text-center">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:10%">View</th>
+                <th style="width:15%">NOMBRE DE ACTIVIDAD</th>
+                <th style="width:15%">DESCRIPCIÓN</th>
+                <th pSortableColumn="ciudad" style="width:15%">CIUDAD <p-sortIcon field="ciudad"></p-sortIcon></th>
+                <th style="width:10%">EMAIL CREADOR</th>
+                <th pSortableColumn="puntuacion" style="width:10%">PUNTUACIÓN <p-sortIcon
+                        field="puntuacion"></p-sortIcon>
+                </th>
+                <th style="width:3%"></th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-actividad>
+            <tr>
+                <td class="text-center"><button type="button" style="border: none; background: none;"><i
+                            class="pi pi-eye" style="color: blue;"
+                            (click)="obtenerDatosActividades(actividad.id)"></i></button></td>
+                <td class="text-center">{{actividad.nombre}}</td>
+                <td class="text-center">{{actividad.descripcion}}</td>
+                <td class="text-center">{{actividad.ciudad}}</td>
+                <td class="text-center">{{actividad.id_usuario_creador.email}}</td>
+                <td class="text-center"><p-rating [(ngModel)]="actividad.puntuacion" [cancel]="false"
+                        [readonly]="true"></p-rating></td>
+                <td class="text-center">
+                    <button (click)="eliminarActividad(actividad.id)"
+                        style="color: rgb(56, 189, 255); background: none; border: none;"><i
+                            class="pi pi-minus"></i></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (onClick)="abrirFormAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+</div>
+
+@if (modalDetalleOpen) {
+<app-detalle-actividad [modalOpen]="modalDetalleOpen" [actividad]="actividad" [listaUsuarios]="listaUsuariosByActividad"
+    (cerrarModal)="cerrarModalDetalle()"></app-detalle-actividad>
+}
+
+
+@if (m_formulario_actividadAdd) {
+
+<div class="modal-overlay" [@fadeInOut]="true">
+    <div class="modal-content">
+        <form #addActividad="ngForm" (ngSubmit)="onSubmitAdd(actividadAdd)">
+            <span class="close-button" (click)="cerrarFormAdd()"><i class="pi pi-times"></i></span>
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue;">Añadir Actividad</h2>
+            </div>
+            <p-tabMenu [model]="items">
+                <ng-template pTemplate="item" let-item>
+                    <ng-container>
+                        <a class="p-menuitem-link">
+                            <span [class]="item.icon"></span>
+                            <span class="ml-2">
+                                {{ item.label }}
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </p-tabMenu>
+
+            <div class="modal-body mt-4">
+                @if (!generalForm && !fechaForm) {
+                <h1 class="text-center">HAZ CLICK PARA MOSTRAR LOS FORMULARIOS </h1>
+                }
+                @if (generalForm) {
+
+                <div [@slideInOutForm]="true">
+                    <input type="hidden" class="form-control" id="id_usuario_creador" name="id_usuario_creador"
+                        [(ngModel)]="actividadAdd.id_usuario_creador">
+                    <div style=" display: flex; justify-content: space-between;" class="row">
+                        <div class="form-floating mb-5 col-5">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre"
+                                [(ngModel)]="actividadAdd.nombre" required>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad"
+                                [(ngModel)]="actividadAdd.ciudad" required>
+                            <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"
+                                [(ngModel)]="actividadAdd.precio" required>
+
+                        </div>
+                        <div class="form-floating mb-4 col-7">
+                            <textarea rows="6" cols="56" pInputTextarea [(ngModel)]="actividadAdd.descripcion"
+                                aria-placeholder="Descipción" name="descripcion">
+                        </textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="d-flex" style="justify-content: space-around;">
+                            <ul style="list-style: none; align-items: center; justify-content: center;">
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="personal" name="personal"
+                                        [(ngModel)]="actividadAdd.personal" required>
+                                    <label for="personal" class="form-check-label"><strong>Personal</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="trasporte" name="trasporte"
+                                        [(ngModel)]="actividadAdd.trasporte" required>
+                                    <label for="trasporte" class="form-check-label"><strong>Transporte</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="material" name="material"
+                                        [(ngModel)]="actividadAdd.material" required>
+                                    <label for="material" class="form-check-label"><strong>Meterial</strong></label>
+                                </li>
+                            </ul>
+                            <div class="col-6"></div>
+                            <div class="form-floating  col-6" style="margin-left: 100px;">
+                                <input type="number" class="form-control" id="n_plazas" name="n_plazas"
+                                    placeholder="Número de Plazas" [(ngModel)]="actividadAdd.n_plazas" required>
+                                <div class="d-flex">
+                                    <input type="number" class="form-control" id="n_plazas_min" name="n_plazas_min"
+                                        placeholder="Plazas Mínimas" [(ngModel)]="actividadAdd.n_plazas_min" required>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="col-4">
+                            <input type="text" class="form-control" id="preparacion_f" name="preparacion_f"
+                                placeholder="Preparación Física" [(ngModel)]="actividadAdd.preparacion_f" required>
+                        </div>
+                    </div>
+                </div>
+                }
+                @if (fechaForm) {
+
+                <div [@slideInOutForm]>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-4">
+                                <label for="dia" class="form-label">Día de la Actividad</label>
+                                <input type="date" class="form-control" id="dia" name="dia"
+                                    [(ngModel)]="actividadAdd.dia" required>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="form-floating col-3">
+                                <label for="duracion_aprox" class=" form-label">Duración Aproxinada</label>
+                                <input type="time" class="form-control" id="duracion_aprox" name="duracion_aprox"
+                                    [(ngModel)]="actividadAdd.duracion_aprox" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-2">
+                                <label for="hora_inicio" class="form-label">Hora Inicio</label>
+                                <input type="time" class="form-control" id="hora_inicio" name="hora_inicio"
+                                    [(ngModel)]="actividadAdd.hora_inicio" required>
+                            </div>
+                            <div class="col-0"></div>
+                            <div class="form-floating col-2">
+                                <label for="hora_fin" class="form-label">Hora Fin</label>
+                                <input type="time" class="form-control" id="hora_fin" name="hora_fin"
+                                    [(ngModel)]="actividadAdd.hora_fin" required>
+                            </div>
+                            <div class="col-0"></div>
+
+                        </div>
+                    </div>
+
+                    <button type="submit" class="button" [disabled]="!addActividad.valid">Crear Actividad</button>
+
+                </div>
+                }
+
+
+            </div>
+        </form>
+
+    </div>
+</div>
+}

@@ -1,0 +1,39 @@
+<div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Lista de Actividades</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" (click)="cerrar()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p-table [value]="listaActividades" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                    [tableStyle]="{ 'width': '100%'}"
+                    currentPageReportTemplate="Mostrando del {first} al {last} ({totalRecords} Actividades en Lista)"
+                    class="table table-hover table-striped text-center">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>Puntuar</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-actividad>
+                        <tr>
+
+                            <td>{{actividad.nombre}}</td>
+                            <td style="display: flex; justify-content: center; align-items: center;">
+                                <p-rating [(ngModel)]="actividad.puntuacion" [cancel]="false" [readonly]="false"
+                                    name="puntuacion"></p-rating>
+                                <button type="button" class="btn btn-primary" style="font-size: 10px; margin-left: 10%;"
+                                    (click)="onSubmit(actividad.id, actividad.puntuacion)">Puntuar</button>
+                            </td>
+
+                        </tr>
+                    </ng-template>
+                    >
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>

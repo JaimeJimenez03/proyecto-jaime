@@ -1,0 +1,45 @@
+<body>
+    <main [@fadeInOut]>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div>
+                    <div class="card">
+                        <div class="card-header">Login</div>
+                        <div class="card-body">
+                            <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)" method="post">
+                                @if (messageBoolean) {
+                                <h5 class="text-center mb-4" style="color: red;">{{message}}</h5>
+                                }
+                                <div class="w-100 mb-5">
+                                    <div class="">
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            placeholder="Nombre de Usuario" [(ngModel)]="username" required>
+                                    </div>
+                                </div>
+
+                                <div class="w-100 mb-5">
+                                    <div class="">
+                                        <input type="{{ tipoInput }}" class="password" class="form-control"
+                                            id="password" name="password" placeholder="Contraseña"
+                                            [(ngModel)]="password" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary"
+                                    [disabled]=" !loginForm.valid">Acceder</button>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            ¿No tienes cuenta? <a routerLink="/registro">Registrate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <h5 style="text-align: end; margin: 80px 45px  45px 45px; color: white;">Proyecto Integrado Jaime Jiménez
+            Machuca 2023/2034
+        </h5>
+    </footer>
+</body>

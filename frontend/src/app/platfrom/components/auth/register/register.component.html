@@ -1,0 +1,121 @@
+<html>
+
+<body>
+    <div [@fadeInOut]>
+
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm.value)" style="background-image: url('/assets/imgLogin.jpg');
+            background-size: cover;
+    background-position: center;
+    background-attachment: fixed;">
+            <div class="container">
+                <div class="justify-content-center">
+                    <div class="card">
+                        <div class="card-header">Registro</div>
+                        <div class="card-body">
+                            <!-- @if (!message1) {
+                            <h5 class="text-center mb-4" style="color: red;" [@fadeInOut]>
+                                {{message1}}</h5>
+                            }@else {
+                            <h5 class="text-center mb-4" style="color: green;" [@fadeInOut]>{{message2}}</h5>
+                            } -->
+
+
+
+                            <div class=" row">
+                                <div class="form-floating mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
+                                        [(ngModel)]="usuario.name" required>
+                                </div>
+                                <div class="form-floating mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="city" name="city" placeholder="Ciudad"
+                                        [(ngModel)]="usuario.city" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-floating mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="surname" name="surname"
+                                        placeholder="Apellidos" [(ngModel)]="usuario.surname" required>
+                                </div>
+                                <div class="form-floating mb-3 col-md-6">
+                                    <input type="date" class="form-control" id="dt_nac" name="dt_nac"
+                                        placeholder="Fecha Nacimiento" [(ngModel)]="usuario.dt_nac" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-floating mb-3 col-md-6">
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        placeholder="Nombre de Usuario" [(ngModel)]="usuario.username"
+                                        (input)="onChangeUsername($event)" required>
+                                </div>
+                                <div class="form-floating mb-3 col-md-6">
+                                    <input type="number" class="form-control" id="n_telefono" name="n_telefono"
+                                        placeholder="Número de Teléfono" [(ngModel)]="usuario.n_telefono" required>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-3">
+
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                                    [(ngModel)]="usuario.email" required>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <div class="d-flex">
+                                    <input type="{{ tipoInput }}" class="password form-control" id="password"
+                                        name="password" placeholder="Contraseña" [(ngModel)]="usuario.password"
+                                        required>
+
+                                    <button type="button" (click)="toggleContrasena()"
+                                        style="width: 40px; height: 38px; border: 1px solid rgb(209, 209, 209); border-radius: 5px; margin-left: 10px;">
+                                        @if(!mostrado){
+                                        <i class="pi pi-eye"></i>
+                                        }@else {
+                                        <i class="pi pi-eye-slash"></i>
+                                        }
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-center mb-4 slidedown-icon">
+                                <span style="font-weight: bold; font-size: 20px;">Continua por Aquí</span>
+
+                                <i class="pi pi-arrow-down "
+                                    style="font-size: 20px; background-color: #086f12; padding: 10px; border-radius: 100px; margin-left: 10px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" container">
+                <div class="justify-content-center">
+                    <div class="">
+                        <div class="card">
+                            <div class="card-header">Como desea usar la APP</div>
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: space-around;" class="row">
+                                    @if (error) {
+                                    <h5 class="text-center mb-4" style="color: red;" [@fadeInOut]>
+                                        {{message1}}</h5>
+                                    }
+                                    <h5>Elije una funcionalidad</h5>
+                                    <select name="role" id="role" [(ngModel)]="rolUsuario" style="padding: 5px;">
+                                        <option disabled selected>Selecciona</option>
+                                        <option [ngValue]="2">Crear Actividades</option>
+                                        <option [ngValue]="3">Participar en Actividades</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-between mt-5">
+                                    <button type="submit" class="btn btn-primary"
+                                        [disabled]="!registerForm.valid">Registrarse</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        style="background-color: rgba(255, 0, 0, 0.5);"
+                                        routerLink="/login">Volver</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

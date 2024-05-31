@@ -1,0 +1,281 @@
+<div [@fadeInOut]>
+    <div class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close" style="margin: 5px; margin-left: 10px;"
+                (click)="cerrarModalSin()">&times;</span>
+            @if (usuarioLogueado.id === actividadCurrent.id_usuario_creador.id) {
+            <button class="buttonLe" style="margin-right: 30%;" type="button" (click)="abrirUsuarios()">Usuarios
+                Inscritos</button>
+            }
+            <button class="buttonLe" type="button" (click)="abrirLeyenda()">Leyenda</button>
+            <div style="display: flex; justify-content: space-between;" class="row col-12">
+                <section class="descripcion col-4">
+                    <h2 class="mb-5">{{ actividadCurrent.nombre }}</h2>
+                    <img [src]="actividadCurrent.imagen" alt="Imagen Actividad" style="width: 100%;">
+                    <div class="mt-5 mb-4"><strong>Descripción</strong> {{ actividadCurrent.descripcion }}</div>
+
+                </section>
+                <div class="col-1"></div>
+                <section class="detalles col-6">
+                    <div>
+                        <div class="m-3 justify-content-center">
+                            <i class="pi pi-calendar h4"></i> {{ actividadCurrent.dia |
+                            date:'dd/MM/yyyy' }}
+                        </div>
+                        <div class="m-3"><i class="pi pi-clock h4"></i> {{ actividadCurrent.hora_inicio }}</div>
+                        <div class="m-3"><i class="pi pi-history h4"></i> {{ actividadCurrent.hora_fin }}</div>
+                        <div class="m-3"><i class="pi pi-building h4"></i> {{ actividadCurrent.ciudad }}</div>
+                        <div class="m-3"><i class="pi pi-stopwatch h4"></i> {{ actividadCurrent.duracion_aprox }}</div>
+                        <div class="m-3"><i class="pi pi-users h4"></i> {{ actividadCurrent.n_plazas }}</div>
+                    </div>
+                    <div>
+                        <div class="m-3"><i class="pi pi-user-minus h4"></i> {{ actividadCurrent.n_plazas_min }}</div>
+                        <div class="m-3"><i class="pi pi-user h4"></i> @if(actividadCurrent.personal){ Si }@else {
+                            No }</div>
+                        <div class="m-3"><i class="pi pi-car h4"></i> @if(actividadCurrent.transporte){ Si }@else
+                            { No }</div>
+                        <div class="m-3"><i class="pi pi-mobile h4"></i> @if(actividadCurrent.material){ Si }@else {
+                            No }</div>
+                        <div class="m-3"><i class="pi pi-briefcase h4"></i> {{ actividadCurrent.preparacion_f }}</div>
+                        @if (actividadCurrent.precio == 0 ) {
+                        Entrada Gratuita
+                        }@else {
+                        <div class="m-3"> {{ actividadCurrent.precio }}<i class="pi pi-euro h4"></i></div>
+                        }
+                    </div>
+                </section>
+
+
+            </div>
+            <div style="margin: 3%; margin-left: 13%;"><i class="pi pi-users h4"></i>
+                Usuarios registrados: {{actividadCurrent.n_usuarios}}
+            </div>
+            <p-rating [(ngModel)]="actividadCurrent.puntuacion" [cancel]="false" [readonly]="true"
+                class="puntuacion"></p-rating>
+            @if (!vistaPre) {
+
+            @if (actividadCurrent.n_plazas <= actividadCurrent.n_usuarios) { <button class="buttonAc btn btn-danger">
+                Actividad
+                Completa</button>
+                }@else if(!usuarioInscrito){
+                <button class="buttonAc btn" (click)="confirmarAct()">Acceder a la Actividad</button>
+                }
+                }@else if (usuarioLogueado.id === actividadCurrent.id_usuario_creador.id) {
+                <button class="buttonAc btn " (click)="eliminarAct()">Eliminar Actividad</button>
+                <button class="buttonEdi btn" (click)="abrirEdit()">Editar Actividad</button>
+                }@else{
+                <button class="buttonAc btn " (click)="cancelarAct()">Cancelar Actividad</button>
+                }
+                @if(duplicado){
+                <button class="buttonAc btn" style="background-color: red; color: rgb(0, 21, 255);"
+                    (click)="cancelarAct()">
+                    Ya
+                    perteneces a esta
+                    Actividad</button>
+
+                }
+
+
+        </div>
+    </div>
+</div>
+
+@if (mostrarLeyenda) {
+<div class="modal-content-leyenda" [@fadeInOut]>
+    <span class="close" style="margin: 5px; margin-left: 10px;" (click)="mostrarLeyenda = false">&times;</span>
+    <div style="display: flex; justify-content: center;">
+        <section class="detalle-leyenda">
+            <div>
+                <div class="m-3 justify-content-center">
+                    <i class="pi pi-calendar h4"></i> Día Actividad
+                </div>
+                <div class="m-3"><i class="pi pi-clock h4"></i> Hora Inicio</div>
+                <div class="m-3"><i class="pi pi-history h4"></i> Hora Fin</div>
+                <div class="m-3"><i class="pi pi-building h4"></i> Ciudad</div>
+                <div class="m-3"><i class="pi pi-stopwatch h4"></i> Duración</div>
+                <div class="m-3"><i class="pi pi-users h4"></i> Nº De Plazas</div>
+            </div>
+            <div>
+                <div class="m-3"><i class="pi pi-user-minus h4"></i> Nº Mínimo de Plazas</div>
+                <div class="m-3"><i class="pi pi-user h4"></i> Personal?</div>
+                <div class="m-3"><i class="pi pi-car h4"></i> Trasporte?</div>
+                <div class="m-3"><i class="pi pi-mobile h4"></i> Material?</div>
+                <div class="m-3"><i class="pi pi-briefcase h4"></i> Preparación Física</div>
+                <div class="m-3"><i class="pi pi-euro h4"></i> Precio</div>
+            </div>
+        </section>
+    </div>
+</div>
+}
+
+@if (mostrarUsuarios) {
+<div class="modal-overlay-user" [@fadeInOut]="true">
+    <div class="modal-content-user">
+        <div>
+            <span class="close" style="margin: 5px; margin-left: 10px;" (click)="mostrarUsuarios = false">&times;</span>
+            <h4 class="text-center mb-5 modal-header">Usuarios Inscritos en la Actividad</h4>
+            <p-table [value]="listaUsuarios" [tableStyle]="{'min-width': '26rem'}" [paginator]="true" [rows]="5"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="text-center">Usuario</th>
+                        <th class="text-center">Número de Teléfono</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-usuario let-columns="columns">
+                    <tr>
+                        <td class="text-center"> {{usuario.username}}</td>
+                        <td class="text-center"> {{usuario.n_telefono}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+}
+
+
+
+@if (m_formulario_actividadEdit) {
+
+<div class="modal-overlay-edit">
+    <div class="modal-content-edit" [@slideInOutForm]="true">
+        <form #addUser="ngForm" (ngSubmit)="onSubmitEdit(actividad)">
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue;">Editar Actividad</h2>
+                <button class="btn btn-primary" type="button" (click)="cerrarFormEdit()">Cancelar</button>
+
+            </div>
+            <p-tabMenu [model]="items">
+                <ng-template pTemplate="item" let-item>
+                    <ng-container>
+                        <a class="p-menuitem-link">
+                            <span [class]="item.icon"></span>
+                            <span class="ml-2">
+                                {{ item.label }}
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </p-tabMenu>
+
+            <div class="modal-body-edit mt-4">
+                @if (!generalForm && !fechaForm) {
+                <h1 class="text-center">HAZ CLICK PARA MOSTRAR LOS FORMULARIOS </h1>
+                }
+                @if (generalForm) {
+
+                <div [@slideInOutForm]="true">
+                    <input type="hidden" name="id" [(ngModel)]="actividadEdit.id">
+                    <input type="hidden" class="form-control" id="id_usuario_creador" name="id_usuario_creador"
+                        [(ngModel)]="actividadEdit.id_usuario_creador">
+                    <div style=" display: flex; justify-content: space-between;" class="row">
+                        <div class="form-floating mb-5 col-5">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre"
+                                [(ngModel)]="actividadEdit.nombre" required>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad"
+                                [(ngModel)]="actividadEdit.ciudad" required>
+                            <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"
+                                [(ngModel)]="actividadEdit.precio" required>
+                        </div>
+                        <div class="form-floating mb-4 col-7">
+                            <textarea rows="6" cols="56" pInputTextarea [(ngModel)]="actividadEdit.descripcion"
+                                aria-placeholder="Descipción" name="descripcion">
+                                </textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="d-flex" style="justify-content: space-around;">
+                            <ul style="list-style: none; align-items: center; justify-content: center;">
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="personal" name="personal"
+                                        [(ngModel)]="actividadEdit.personal" required>
+                                    <label for="personal" class="form-check-label"><strong>Personal</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="trasporte" name="trasporte"
+                                        [(ngModel)]="actividadEdit.transporte" required>
+                                    <label for="trasporte" class="form-check-label"><strong>Transporte</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="material" name="material"
+                                        [(ngModel)]="actividadEdit.material" required>
+                                    <label for="material" class="form-check-label"><strong>Material</strong></label>
+                                </li>
+                            </ul>
+                            <div class="col-6"></div>
+                            <div class="form-floating  col-6" style="margin-left: 100px;">
+                                <input type="number" class="form-control" id="n_plazas" name="n_plazas"
+                                    placeholder="Número de Plazas" [(ngModel)]="actividadEdit.n_plazas" required>
+                                <div class="d-flex">
+                                    <input type="number" class="form-control" id="n_plazas_min" name="n_plazas_min"
+                                        placeholder="Plazas Mínimas" [(ngModel)]="actividadEdit.n_plazas_min" required>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <input type="text" class="form-control" id="preparacion_f" name="preparacion_f"
+                            placeholder="Preparación Física" [(ngModel)]="actividadEdit.preparacion_f" required>
+                    </div>
+                </div>
+
+
+
+
+                }
+                @if (fechaForm) {
+
+                <div [@slideInOutForm]>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-4">
+                                <label for="dia" class="form-label">Día de la Actividad</label>
+                                <input type="date" class="form-control" id="dia" name="dia"
+                                    [(ngModel)]="actividadEdit.dia" required>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="form-floating col-3">
+                                <label for="duracion_aprox" class=" form-label">Duración Aproxinada</label>
+                                <input type="time" class="form-control" id="duracion_aprox" name="duracion_aprox"
+                                    [(ngModel)]="actividadEdit.duracion_aprox" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-2">
+                                <label for="hora_inicio" class="form-label">Hora Inicio</label>
+                                <input type="time" class="form-control" id="hora_inicio" name="hora_inicio"
+                                    [(ngModel)]="actividadEdit.hora_inicio" required>
+                            </div>
+                            <div class="col-0"></div>
+                            <div class="form-floating col-2">
+                                <label for="hora_fin" class="form-label">Hora Fin</label>
+                                <input type="time" class="form-control" id="hora_fin" name="hora_fin"
+                                    [(ngModel)]="actividadEdit.hora_fin" required>
+                            </div>
+                            <div class="col-0"></div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="button" (click)="onSubmitEdit(actividadEdit)">Actualizar
+                        Actividad</button>
+
+                </div>
+                }
+
+
+            </div>
+        </form>
+
+    </div>
+</div>
+}

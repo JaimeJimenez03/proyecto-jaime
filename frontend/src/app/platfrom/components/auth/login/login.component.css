@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@1,900&display=swap');
+
+body {
+    background-image: url('/assets/imgLogin.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: "Source Code Pro", monospace;
+    margin: 0;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 600px;
+    height: 500px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(228, 241, 245, 0.5);
+}
+
+.card-header {
+    background-color: #086f127e;
+    color: white;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    font-size: 25px;
+    text-align: center;
+}
+
+.card-body {
+    padding: 20px;
+    margin: 40px 70px;
+}
+
+input {
+    font-size: 20px;
+    height: 50px;
+    width: 100%;
+}
+
+.button {
+    height: 50px;
+    width: 50px;
+}
+
+button[type="submit"] {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 5000px;
+    background-color: #086f12;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.4s;
+    margin-top: 20px;
+    margin-left: 80px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    text-align: center;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    background-color: rgba(225, 225, 224, 0.5);
+    text-align: center;
+}

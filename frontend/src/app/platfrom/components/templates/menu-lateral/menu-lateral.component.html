@@ -1,0 +1,45 @@
+<div class="menu" [ngClass]="{'active': menuOpen}" [@slideInOut]>
+    @if (usuarioLogueado == null) {
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <button type="button" class="logout" routerLink="/login">Iniciar Sesión</button>
+    </div>
+    }@else {
+    <div>
+        <span (click)="closeMenu()" class="close-button"><i class="pi pi-times"></i></span>
+        <div style="text-align: center;">
+            <div class="avatar">
+                <img src="/assets/imgPerfil.jpg" alt="">
+            </div>
+        </div>
+    </div>
+    <h4 class="mt-5 mb-5 text-center">{{usuarioLogueado.name}}</h4>
+
+    <ul>
+        <li><button type="button" (click)="perfil()">Ver Perfil</button></li>
+
+        @if(usuarioLogueado.role.id === 1){
+        <li>
+            <button type="button" routerLink="/panelDeAdministracion">Ver Panel de Administrador</button>
+        </li>}
+
+        <li>
+            <button type="button" (click)="puntuar()">Puntuar Actividades</button>
+        </li>
+
+    </ul>
+
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <button type="button" class="logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+    }
+</div>
+<div class="overlay" [ngClass]="{'active': menuOpen}" (click)="closeMenu()" [ngClass]="{'noActive': !menuOpen}"></div>
+
+
+@if(mostrarPerfil) {
+<app-perfil (cerrarPerfil)="cerrarPerfil()"></app-perfil>
+}
+
+@if (puntuarAct) {
+<app-puntuar-act (cerrarPuntuar)="puntuar()"></app-puntuar-act>
+}

@@ -1,0 +1,64 @@
+@if (usuarioLogueado != null) {
+<div [@fadeInOut] class="html">
+    <app-cabecera></app-cabecera>
+    <div class="row" style="margin: 50px 200px; margin-top: 15%;">
+        <div class="col-md-4" *ngFor="let actividad of listaActividades; let i = index">
+            <div class="card" [ngClass]="{'even': i % 2 == 0, 'odd': i % 2 != 0, 'add':i == 1}">
+                <div class="header">
+                    <img [src]="actividad.imagen" alt="Imagen">
+                </div>
+                <h4 class="text-center" style="color: white; margin-top: 1%;
+                    margin-bottom: 5%;">{{actividad.nombre}}</h4>
+                <div class="card-body">
+                    <p>Descripción: <span class="descripcion">{{actividad.descripcion}}</span></p>
+                    <div style="display: flex; justify-content: space-between;">
+                        <p>Creador: <span class="descripcion">{{actividad.id_usuario_creador.username}}</span></p>
+                        <p>Nº Contacto <span class="descripcion">{{actividad.id_usuario_creador.n_telefono}}</span></p>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between;">
+                        <p>Nº de plazas: <span class="plazas">{{actividad.n_plazas}}</span></p>
+                        <p>Nº de plazas mínimas: <span class="plazas">{{actividad.n_plazas_min}}</span></p>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between;">
+                        <p>Día: <span class="dia">{{actividad.dia}}</span></p>
+                        <p>Hora: <span class="hora">{{actividad.hora_inicio}}</span></p>
+                        <p>Duración: <span class="duracion">{{actividad.duracion_aprox}}</span></p>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between;">
+                        <p>Precio: <span class="precio">@if (actividad.precio == 0 ) {Entrada Gratuita}@else{
+                                {{actividad.precio }}€}</span></p>
+                        <button class="btn btn-primary" style="width: 10%px; font-size: 15px;margin-top: 30px;"
+                            (click)="abrirDetalle(actividad)">Acceder</button>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p-rating [(ngModel)]="actividad.puntuacion" [cancel]="false" [readonly]="true"></p-rating>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button type="button" class="btn btn-primary mb-5" routerLink="">Volver al Inicio</button>
+    </div>
+</div>
+
+@if (accesoActividad) {
+<app-detalle-actividad (actividad)="actividadAct($event)" [actividadCurrent]="actividad"
+    (cerrarDetalle)="cerrarDetalle()" (cerrarDetalleSin)="cerrarDetalleSin()"></app-detalle-actividad>
+}
+
+@if (mostrarAlerta) {
+<div class="modal-content-alerta" [@fadeInOut]>
+    <div>
+        <h3>Se ha completado el acceso a esta actividad</h3>
+        <h4>Ve a MIS ACTIVIDADES para ver tus actividades</h4>
+    </div>
+</div>
+}
+}@else {
+{{redireccion()}}
+}

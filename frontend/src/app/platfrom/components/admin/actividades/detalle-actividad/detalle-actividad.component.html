@@ -1,0 +1,388 @@
+<div class="modal-overlay" [@fadeInOut]="true">
+    <div class="modal-content">
+        <span (click)="cerrarModalEvento()" class="close-button"><i class="pi pi-times"></i></span>
+        <div class="modal-header">
+            <div class="d-flex">
+                <h2 class="modal-title" style="color: blue; margin-right: 100px;">Datos de Actividad</h2>
+                <button class="btn btn-primary" (click)="abrirFormEdit()">Editar Actividad</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class=" d-flex">
+                <div class=" activitie-details">
+                    <div>
+                        <div class="m-3"><strong>Nombre:</strong> {{ actividad.nombre }}</div>
+                        <div class="m-3"><strong>Descripción</strong> {{ actividad.descripcion }}</div>
+                        <div class="m-3"><strong>Día Actividad:</strong> {{ actividad.dia | date:'dd/MM/yyyy' }}</div>
+                        <div class="m-3"><strong>Hora Inicio:</strong> {{ actividad.hora_inicio}}</div>
+                        <div class="m-3"><strong>Hora Fin:</strong> {{ actividad.hora_fin }}</div>
+                        <div class="m-3"><strong>Ciudad:</strong> {{ actividad.ciudad }}</div>
+                        <div class="m-3"><strong>Duración Aproximada:</strong> {{ actividad.duracion_aprox }}</div>
+                        <div class="m-3"><strong>Número Plazas:</strong> {{ actividad.n_plazas }}</div>
+                        <div>
+                            <img src="/assets/logo.jpg" alt="imagen logo"
+                                style="width: 50%; margin-top: 40px; background-color: white;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="m-3"><strong>Número Mínimo Plazas:</strong> {{ actividad.n_plazas_min }}</div>
+                        <div class="m-3"><strong>Personal Necesario:</strong> @if(actividad.personal){ Si }@else { No }
+                        </div>
+                        <div class="m-3"><strong>Transporte Necesario:</strong>@if(actividad.transporte){ Si }@else { No
+                            }
+                        </div>
+                        <div class="m-3"><strong>Material Necesario:</strong> @if(actividad.material){ Si }@else { No }
+                        </div>
+                        <div class="m-3"><strong>Preparación Necesaria:</strong> {{ actividad.preparacion_f }}</div>
+                        <div class="m-3"><strong>Precio:</strong> {{ actividad.precio }}</div>
+                        <div class="m-3"><strong>Puntuación:</strong> <p-rating [(ngModel)]="actividad.puntuacion"
+                                [cancel]="false" [readonly]="true"></p-rating></div>
+                        <div class="m-3"><strong>Creador:</strong> {{ actividad.id_usuario_creador.email }}</div>
+                    </div>
+
+                    <div class="container" style="width: 40%;">
+                        <h4 class="text-center mb-5">Usuarios Inscritos en la Actividad</h4>
+                        <div class="card">
+                            <p-table [value]="listaUsuarios" [tableStyle]="{'min-width': '26rem'}" [paginator]="true"
+                                [rows]="5" [showCurrentPageReport]="true">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th class="text-center">Usuario</th>
+                                        <th class="text-center">Correo</th>
+                                        <th style="width: 1%;"></th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-usuario let-columns="columns">
+                                    <tr>
+                                        <td class="text-center"> {{usuario.username}}</td>
+                                        <td class="text-center"> {{usuario.email}}</td>
+                                        <td style="width: 1%; " class="text-center">
+                                            <a (click)="abrirModal(usuario)"><i class="pi pi-minus"></i></a>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showModal) {
+<div class=".sobre-modal" [@fadeInOut]="true">
+    <div class="contenido-modal">
+        <span (click)="cerrarModalConfirm()" class="close-button"><i class="pi pi-times"></i></span>
+        <div class="modal-header">
+            <h2 class="titulo-modal text-center" style="color: blue;">Eliminar Solicitud</h2>
+        </div>
+        <div class="cuerpo-modal text-center">
+            <div class=" d-flex text-center">
+                <div class=" confirm">
+                    <div class="icon-question">
+                        <i class="pi pi-question"></i>
+                    </div>
+                    <h5>¿Está seguro de eliminar a {{usuario.username}} de esta actividad?</h5>
+                </div>
+            </div>
+            <div class="d-flex">
+                <button style="margin-top: 50px; margin-right: 100px; margin-left: 60px; border-radius: 15px;"
+                    class="btn btn-primary" (click)="eliminarUsuario(usuario)">Confirmar</button>
+                <button style="margin-top: 50px; border-radius: 15px;" class="btn btn-danger"
+                    (click)="cerrarModalConfirm()" type="button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (m_formulario_actividadEdit) {
+
+<div class="modal-overlay-edit" [@fadeInOut]="true">
+    <div class="modal-content-edit" [@slideInOutForm]="true">
+        <form #addUser="ngForm" (ngSubmit)="onSubmitEdit(actividad)">
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue;">Añadir Actividad</h2>
+                <button class="btn btn-primary" type="button" (click)="cerrarFormEdit()">Cancelar</button>
+
+            </div>
+            <p-tabMenu [model]="items">
+                <ng-template pTemplate="item" let-item>
+                    <ng-container>
+                        <a class="p-menuitem-link">
+                            <span [class]="item.icon"></span>
+                            <span class="ml-2">
+                                {{ item.label }}
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </p-tabMenu>
+
+            <div class="modal-body-edit mt-4">
+                @if (!generalForm && !fechaForm) {
+                <h1 class="text-center">HAZ CLICK PARA MOSTRAR LOS FORMULARIOS </h1>
+                }
+                @if (generalForm) {
+
+                <div [@slideInOutForm]="true">
+                    <input type="hidden" name="id" [(ngModel)]="actividad.id">
+                    <input type="hidden" class="form-control" id="id_usuario_creador" name="id_usuario_creador"
+                        [(ngModel)]="actividad.id_usuario_creador">
+                    <div style=" display: flex; justify-content: space-between;" class="row">
+                        <div class="form-floating mb-5 col-5">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre"
+                                [(ngModel)]="actividad.nombre" required>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad"
+                                [(ngModel)]="actividad.ciudad" required>
+                            <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"
+                                [(ngModel)]="actividad.precio" required>
+                        </div>
+                        <div class="form-floating mb-4 col-7">
+                            <textarea rows="6" cols="56" pInputTextarea [(ngModel)]="actividad.descripcion"
+                                aria-placeholder="Descipción" name="descripcion">
+                            </textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="d-flex" style="justify-content: space-around;">
+                            <ul style="list-style: none; align-items: center; justify-content: center;">
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="personal" name="personal"
+                                        [(ngModel)]="actividad.personal" required>
+                                    <label for="personal" class="form-check-label"><strong>Personal</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="trasporte" name="trasporte"
+                                        [(ngModel)]="actividad.transporte" required>
+                                    <label for="trasporte" class="form-check-label"><strong>Transporte</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="material" name="material"
+                                        [(ngModel)]="actividad.material" required>
+                                    <label for="material" class="form-check-label"><strong>Meterial</strong></label>
+                                </li>
+                            </ul>
+                            <div class="col-6"></div>
+                            <div class="form-floating  col-6" style="margin-left: 100px;">
+                                <input type="number" class="form-control" id="n_plazas" name="n_plazas"
+                                    placeholder="Número de Plazas" [(ngModel)]="actividad.n_plazas" required>
+                                <div class="d-flex">
+                                    <input type="number" class="form-control" id="n_plazas_min" name="n_plazas_min"
+                                        placeholder="Plazas Mínimas" [(ngModel)]="actividad.n_plazas_min" required>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <input type="text" class="form-control" id="preparacion_f" name="preparacion_f"
+                            placeholder="Preparación Física" [(ngModel)]="actividad.preparacion_f" required>
+                    </div>
+                </div>
+
+
+
+
+                }
+                @if (fechaForm) {
+
+                <div [@slideInOutForm]="true">
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-4">
+                                <label for="dia" class="form-label">Día de la Actividad</label>
+                                <input type="date" class="form-control" id="dia" name="dia" [(ngModel)]="actividad.dia"
+                                    required>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="form-floating col-3">
+                                <label for="duracion_aprox" class=" form-label">Duración Aproxinada</label>
+                                <input type="time" class="form-control" id="duracion_aprox" name="duracion_aprox"
+                                    [(ngModel)]="actividad.duracion_aprox" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-2">
+                                <label for="hora_inicio" class="form-label">Hora Inicio</label>
+                                <input type="time" class="form-control" id="hora_inicio" name="hora_inicio"
+                                    [(ngModel)]="actividad.hora_inicio" required>
+                            </div>
+                            <div class="col-0"></div>
+                            <div class="form-floating col-2">
+                                <label for="hora_fin" class="form-label">Hora Fin</label>
+                                <input type="time" class="form-control" id="hora_fin" name="hora_fin"
+                                    [(ngModel)]="actividad.hora_fin" required>
+                            </div>
+                            <div class="col-0"></div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="button">Actualizar Actividad</button>
+
+                </div>
+                }
+
+
+            </div>
+        </form>
+
+    </div>
+</div>
+}
+
+@if (m_formulario_actividadEdit) {
+
+<div class="modal-overlay-edit" [@fadeInOut]="true">
+    <div class="modal-content-edit" [@slideInOutForm]="true">
+        <form #addUser="ngForm" (ngSubmit)="onSubmitEdit(actividad)">
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue;">Añadir Actividad</h2>
+                <button class="btn btn-primary" type="button" (click)="cerrarFormEdit()">Cancelar</button>
+
+            </div>
+            <p-tabMenu [model]="items">
+                <ng-template pTemplate="item" let-item>
+                    <ng-container>
+                        <a class="p-menuitem-link">
+                            <span [class]="item.icon"></span>
+                            <span class="ml-2">
+                                {{ item.label }}
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </p-tabMenu>
+
+            <div class="modal-body-edit mt-4">
+                @if (!generalForm && !fechaForm) {
+                <h1 class="text-center">HAZ CLICK PARA MOSTRAR LOS FORMULARIOS </h1>
+                }
+                @if (generalForm) {
+
+                <div [@slideInOutForm]="true">
+                    <input type="hidden" name="id" [(ngModel)]="actividad.id">
+                    <input type="hidden" class="form-control" id="id_usuario_creador" name="id_usuario_creador"
+                        [(ngModel)]="actividad.id_usuario_creador">
+                    <div style=" display: flex; justify-content: space-between;" class="row">
+                        <div class="form-floating mb-5 col-5">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre"
+                                [(ngModel)]="actividad.nombre" required>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad"
+                                [(ngModel)]="actividad.ciudad" required>
+                            <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"
+                                [(ngModel)]="actividad.precio" required>
+                        </div>
+                        <div class="form-floating mb-4 col-7">
+                            <textarea rows="6" cols="56" pInputTextarea [(ngModel)]="actividad.descripcion"
+                                aria-placeholder="Descipción" name="descripcion">
+                                </textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="d-flex" style="justify-content: space-around;">
+                            <ul style="list-style: none; align-items: center; justify-content: center;">
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="personal" name="personal"
+                                        [(ngModel)]="actividad.personal" required>
+                                    <label for="personal" class="form-check-label"><strong>Personal</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="trasporte" name="trasporte"
+                                        [(ngModel)]="actividad.transporte" required>
+                                    <label for="trasporte" class="form-check-label"><strong>Transporte</strong></label>
+                                </li>
+
+                                <li class="mb-3">
+                                    <input type="checkbox" class="form-check-input" id="material" name="material"
+                                        [(ngModel)]="actividad.material" required>
+                                    <label for="material" class="form-check-label"><strong>Meterial</strong></label>
+                                </li>
+                            </ul>
+                            <div class="col-6"></div>
+                            <div class="form-floating  col-6" style="margin-left: 100px;">
+                                <input type="number" class="form-control" id="n_plazas" name="n_plazas"
+                                    placeholder="Número de Plazas" [(ngModel)]="actividad.n_plazas" required>
+                                <div class="d-flex">
+                                    <input type="number" class="form-control" id="n_plazas_min" name="n_plazas_min"
+                                        placeholder="Plazas Mínimas" [(ngModel)]="actividad.n_plazas_min" required>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <input type="text" class="form-control" id="preparacion_f" name="preparacion_f"
+                            placeholder="Preparación Física" [(ngModel)]="actividad.preparacion_f" required>
+                    </div>
+                </div>
+
+
+
+
+                }
+                @if (fechaForm) {
+
+                <div [@slideInOutForm]>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-4">
+                                <label for="dia" class="form-label">Día de la Actividad</label>
+                                <input type="date" class="form-control" id="dia" name="dia" [(ngModel)]="actividad.dia"
+                                    required>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="form-floating col-3">
+                                <label for="duracion_aprox" class=" form-label">Duración Aproxinada</label>
+                                <input type="time" class="form-control" id="duracion_aprox" name="duracion_aprox"
+                                    [(ngModel)]="actividad.duracion_aprox" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex mb-4">
+                            <div class="form-floating col-2">
+                                <label for="hora_inicio" class="form-label">Hora Inicio</label>
+                                <input type="time" class="form-control" id="hora_inicio" name="hora_inicio"
+                                    [(ngModel)]="actividad.hora_inicio" required>
+                            </div>
+                            <div class="col-0"></div>
+                            <div class="form-floating col-2">
+                                <label for="hora_fin" class="form-label">Hora Fin</label>
+                                <input type="time" class="form-control" id="hora_fin" name="hora_fin"
+                                    [(ngModel)]="actividad.hora_fin" required>
+                            </div>
+                            <div class="col-0"></div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="button">Actualizar Actividad</button>
+
+                </div>
+                }
+
+
+            </div>
+        </form>
+
+    </div>
+</div>
+}

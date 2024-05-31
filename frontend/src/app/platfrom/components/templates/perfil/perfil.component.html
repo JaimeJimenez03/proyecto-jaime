@@ -1,0 +1,96 @@
+<body [@fadeInOut]>
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="/assets/imgPerfil.jpg" alt="Foto de perfil" class="profile-img">
+            <h1 class="profile-name">{{usuario.username}}</h1>
+        </div>
+
+        <div class="profile-botones">
+            <button target="_blank" class="botones editar" (click)="mostrarFormularioEdit()">Editar
+                Perfil</button>
+            <button target="_blank" class="botones eliminar" (click)="eliminarCuenta()">Eliminar Cuenta</button>
+        </div>
+    </div>
+</body>
+
+@if (m_formulario_usuarioEdit) {
+<div class="modal-overlay" [@fadeInOut]="true">
+    <div class="modal-content">
+        <form #editUser="ngForm" (ngSubmit)="onSubmitEdit(usuario)">
+            <span (click)="mostrarFormularioEdit()" class="close-button"><i class="pi pi-times"></i></span>
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue;">Editar Perfil</h2>
+            </div>
+            <div class="modal-body mt-4">
+
+                <div style="display: flex; justify-content: space-between;" class="row">
+                    <div class="form-floating mb-3 col-5">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
+                            [(ngModel)]="usuario.name" required>
+                    </div>
+
+                    <div class="form-floating mb-3 col-7">
+                        <input type="text" class="form-control" id="surname" name="surname" placeholder="Apellidos"
+                            [(ngModel)]="usuario.surname" required>
+                    </div>
+
+                </div>
+
+                <div style="display: flex; justify-content: space-between;" class="row">
+                    <div class="form-floating mb-3 col-sm-5">
+                        <input type="text" class="form-control" id="username" name="username"
+                            placeholder="Nombre de Usuario" [(ngModel)]="usuario.username" required>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-7">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                            [(ngModel)]="usuario.email" required>
+
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between;" class="row">
+                    <div class="form-floating mb-3 col-4">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="Ciudad"
+                            [(ngModel)]="usuario.city" required>
+                    </div>
+                    <div class="form-floating mb-3 col-4">
+                        <input type="number" class="form-control" id="n_telefono" name="n_telefono"
+                            placeholder="Número de Teléfono" [(ngModel)]="usuario.n_telefono" required>
+                    </div>
+                    <!-- <div class="form-floating mb-3 col-4">
+                        <input type="date" class="form-control" id="dt_nac" name="dt_nac" placeholder="Fecha Nacimiento"
+                            [(ngModel)]="usuario.dt_nac" required>
+                    </div> -->
+                </div>
+
+
+                <div class="d-flex row">
+                    <div class="form-floating mb-3 col-md-11">
+                        <input type="{{ tipoInput }}" class="password" class="form-control" id="password"
+                            name="password" placeholder="Contraseña" [(ngModel)]="contrasenna" required>
+                    </div>
+                    <button type=" button" (click)="toggleContrasena()" class="form-control col-sm buton">
+                        @if(mostrado){
+                        <i class="pi pi-eye-slash"></i>
+                        }@else {
+                        <i class="pi pi-eye"></i>
+                        }
+                    </button>
+                </div>
+
+                <button type="submit" class="button">Editar</button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+
+@if (mostrarAlerta) {
+<div class="modal-content-alerta" [@fadeInOut]>
+    <div>
+        <h3>TU CUENTA SERÁ ELIMINADA</h3>
+        <h4>ELMINANDO CUENTA EN {{contador}} SEGUNDOS</h4>
+    </div>
+</div>
+}

@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@1,900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Source Code Pro", monospace;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #3e525788;
+    color: #fff;
+    padding: 1%;
+    text-align: center;
+    margin-top: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 11;
+    margin-bottom: 10%;
+}
+
+h1 {
+    transition: .5s all;
+}
+
+h1:hover {
+    transform: scale(1.5);
+
+}
+
+.container-padre-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.imagen {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.menu-container {
+    position: relative;
+    transition: 0.3s ease all;
+}
+
+.menu-container:hover {
+    transform: scale(1.3);
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.rectangle {
+    width: 45px;
+    height: 7px;
+    background-color: #ffffff;
+    margin: 7px 0;
+    transition: background-color 0.3s ease;
+}
+
+.menu-button.rotate .rectangle:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.menu-button.rotate .rectangle:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-button.rotate .rectangle:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+@media (max-width: 768px) {
+    .container-padre-header {
+        flex-direction: column;
+    }
+}

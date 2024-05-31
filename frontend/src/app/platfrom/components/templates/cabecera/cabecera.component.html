@@ -1,0 +1,19 @@
+<div>
+    <header>
+        <div class="container-padre-header">
+            <img src="assets/logo.jpg" alt="Logo" class="imagen">
+            <h1>OCIO EN VIVO</h1>
+            <div class="menu-container" (click)="menu()">
+                <button class="menu-button">
+                    <div class="rectangle"></div>
+                    <div class="rectangle"></div>
+                    <div class="rectangle"></div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    @if(menuOpen) {
+    <app-menu-lateral [menuOpen]="menuOpen" (cerrarMenu)="menu"></app-menu-lateral>
+    }
+</div>

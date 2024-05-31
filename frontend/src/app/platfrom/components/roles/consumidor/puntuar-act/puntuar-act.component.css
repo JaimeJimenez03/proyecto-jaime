@@ -1,0 +1,39 @@
+.modal-dialog {
+    display: flex;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    justify-content: center;
+    z-index: 11;
+}
+
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-title {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.table {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.table thead th {
+    font-weight: bold;
+    text-align: center;
+}
+
+.table tbody td {
+    text-align: center;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}

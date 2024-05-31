@@ -1,0 +1,96 @@
+.menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 20%;
+    background-color: #333;
+    padding: 20px;
+    color: white;
+    z-index: 1000;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    text-decoration: none;
+    z-index: 222;
+}
+
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+
+.menu.active {
+    display: block;
+}
+
+.overlay.active {
+    display: block;
+}
+
+.overlay.noActive {
+    display: none;
+}
+
+
+
+/* PERFIL */
+
+.avatar {
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar img {
+    width: 40%;
+    height: 40%;
+    border-radius: 100px;
+}
+
+
+li {
+    margin-top: 10%;
+    list-style: none;
+    transition: .5s ease all;
+}
+
+li button {
+    background: none;
+    color: white;
+    border: none;
+}
+
+li:hover {
+    transform: scale(1.2);
+}
+
+.logout {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.6s, background-color 0.6s, color 0.6s;
+
+    margin-top: 50%;
+
+}
+
+.logout:hover {
+
+    transform: rotateY(360deg) scale(1.3);
+    background-color: #FF5722;
+    color: #fff;
+}

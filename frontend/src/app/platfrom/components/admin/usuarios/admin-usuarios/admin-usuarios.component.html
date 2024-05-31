@@ -1,0 +1,276 @@
+<h3 class="text-center mt-5 mb-5">Usuarios</h3>
+<div class="">
+    <p-table [value]="listaUsuarios" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'width': '80%', 'margin-left': '8%'}"
+        currentPageReportTemplate="Mostrando del {first} al {last} ({totalRecords} Usuarios totales)"
+        class="table table-hover table-striped text-center">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:10%">View</th>
+                <th style="width:15%">NOMBRE DE USUARIO</th>
+                <th pSortableColumn="email" style="width:15%">CORREO ELECTRÓNICO <p-sortIcon field="email"></p-sortIcon>
+                </th>
+                <th pSortableColumn="ciudad" style="width:15%">CIUDAD <p-sortIcon field="ciudad"></p-sortIcon></th>
+                <th style="width:10%">TELÉFONO</th>
+                <th pSortableColumn="rol.nombre" style="width:15%">ROl <p-sortIcon field="rol.nombre"></p-sortIcon></th>
+                <th style="width:3%"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+            <tr>
+                <td class="text-center"><button type="button" style="border: none; background: none;"
+                        (click)="abrirModal(usuario)"><i class="pi pi-eye" style="color: blue;"></i></button></td>
+                <td class="text-center">{{usuario.username}}</td>
+                <td class="text-center">{{usuario.email}}</td>
+                <td class="text-center">{{usuario.city}}</td>
+                <td class="text-center">{{usuario.n_telefono}}</td>
+                <td class="text-center">{{usuario.role.name | uppercase }}</td>
+                <td class="text-center">
+                    <button (click)="abrirModalConfirm(usuario)"
+                        style="color: rgb(56, 189, 255); background: none; border: none;"><i
+                            class="pi pi-minus"></i></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                (onClick)="mostrarFormularioUsuarioAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+</div>
+
+@if (modalOpen) {
+<div class="modal-overlay" [@fadeInOut]="true">
+    <div class="modal-content">
+        <span (click)="cerrarModal()" class="close-button"><i class="pi pi-times"></i></span>
+        <div class="modal-header">
+            <h2 class="modal-title" style="color: blue;">Datos de Usuario</h2>
+            <button (click)="mostrarFormularioEdit()" class="btn btn-primary me-5">Editar Usuario</button>
+        </div>
+        <div class="modal-body">
+            <div class=" d-flex">
+                <div class=" user-details">
+                    <div class="m-3"><strong>Nombre:</strong> {{ usuario.name }}</div>
+                    <div class="m-3"><strong>Apellidos:</strong> {{ usuario.surname }}</div>
+                    <div class="m-3"><strong>Nombre Usuario:</strong> {{ usuario.username }}</div>
+                    <div class="m-3"><strong>Email:</strong> {{ usuario.email }}</div>
+                    <div class="m-3"><strong>Fecha de Nacimiento:</strong> {{ usuario.dt_nac |
+                        date:'dd/MM/yyyy'
+                        }}</div>
+                    <div class="m-3"><strong>Ciudad:</strong> {{ usuario.city }}</div>
+                    <div class="m-3"><strong>Número de Teléfono:</strong> {{ usuario.n_telefono }}</div>
+                    <div class="m-3"><strong>Rol:</strong> {{usuario.role.name | uppercase }}</div>
+                    @if (listaSolicitudesPorUsuarios != null && listaSolicitudesPorUsuarios.length !== 0 ) {
+                    <div class="m-2"><strong>Solicitudes:</strong> {{ usuario.id_solicitud}}</div>
+                    <ul>
+                        <p-table [value]="listaSolicitudesPorUsuarios" [paginator]="true" [rows]="3"
+                            [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50%'}" class="listaSoli">
+                            <ng-template pTemplate="body" let-solicitud>
+                                <ul>
+                                    <li>{{solicitud.nombre}}</li>
+                                </ul>
+                            </ng-template>
+
+                        </p-table>
+                    </ul>
+                    }@else {
+                    <div class="m-5 h4"><strong>No tiene solicitudes</strong> {{ usuario.id_solicitud}}</div>
+                    }
+                </div>
+                <div>
+                    <img src="/assets/logo.jpg" alt="imagen logo" style="width: 90%; background-color: white;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+
+@if (m_formulario_usuarioAdd) {
+<div class="modal-overlay" [@fadeInOut]="true">
+    <div class="modal-content">
+        <form #addUser="ngForm" (ngSubmit)="onSubmit(formData)">
+            <span (click)="mostrarFormularioUsuarioAdd()" class="close-button"><i class="pi pi-times"></i></span>
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue;">Añadir Usuario</h2>
+                <div class="form-floating mt-3">
+                    <label for="rol">Rol</label>
+                    <select class="form-select ml-3" name="role" [(ngModel)]="formData.role" required>
+                        @for (role of listaRoles; track $index) {
+                        <option [ngValue]="role">{{ role.name | uppercase}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-body mt-4">
+
+                <div style="display: flex; justify-content: space-between;" class="row">
+                    <div class="form-floating mb-3 col-5">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
+                            [(ngModel)]="formData.name" required>
+                    </div>
+
+                    <div class="form-floating mb-3 col-7">
+                        <input type="text" class="form-control" id="surname" name="surname" placeholder="Apellidos"
+                            [(ngModel)]="formData.surname" required>
+                    </div>
+
+                </div>
+
+                <div style="display: flex; justify-content: space-between;" class="row">
+                    <div class="form-floating mb-3 col-sm-5">
+                        <input type="text" class="form-control" id="username" name="username"
+                            placeholder="Nombre de Usuario" [(ngModel)]="formData.username" required>
+                    </div>
+
+                    <div class="form-floating mb-3 col-md-7">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                            [(ngModel)]="formData.email" required>
+
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between;" class="row">
+                    <div class="form-floating mb-3 col-4">
+                        <input type="text" class="form-control" id="username" name="city" placeholder="Ciudad"
+                            [(ngModel)]="formData.city" required>
+                    </div>
+                    <div class="form-floating mb-3 col-4">
+                        <input type="number" class="form-control" id="n_telefono" name="n_telefono"
+                            placeholder="Número de Teléfono" [(ngModel)]="formData.n_telefono" required>
+                    </div>
+                    <div class="form-floating mb-3 col-4">
+                        <input type="date" class="form-control" id="dt_nac" name="dt_nac" placeholder="Fecha Nacimiento"
+                            [(ngModel)]="formData.dt_nac" required>
+                    </div>
+                </div>
+
+
+                <div class="d-flex row">
+                    <div class="form-floating mb-3 col-md-11">
+                        <input type="{{ tipoInput }}" class="password" class="form-control" id="password"
+                            name="password" placeholder="Contraseña" [(ngModel)]="formData.password" required>
+                    </div>
+                    <button type=" button" (click)="toggleContrasena()" class="form-control col-sm buton">
+                        @if(mostrado){
+                        <i class="pi pi-eye-slash"></i>
+                        }@else {
+                        <i class="pi pi-eye"></i>
+                        }
+                    </button>
+                </div>
+
+                <button type="submit" class="button" [disabled]="!addUser.valid">Añadir</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+}
+
+@if (m_formulario_usuarioEdit) {
+<form #editUser="ngForm" (ngSubmit)="onSubmitEdit(usuario)" [@fadeInOut]="true">
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <span (click)="mostrarFormularioEdit()" class="close-button"></span>
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: blue; margin-right: 10px;">Editar Usuario</h2>
+                <div>
+                    <button type="submit" class="btn btn-primary mr-4">Editar</button>
+                    <button (click)="cerrarFormEdit()" class="btn btn-danger" type="button">Cancelar</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class=" d-flex">
+                    <div class=" user-details-edit">
+                        <h5 class="text-right">Editable (E) || No editable (N)</h5>
+
+                        <div style="margin-top: 0;">
+                            <strong>(N) Nombre:</strong>
+                            <input type="text" class="form-edit" [(ngModel)]="usuario.name" name="name" readonly />
+                        </div>
+                        <div>
+                            <strong>(N) Apellidos:</strong>
+                            <input type="text" class="form-edit" [(ngModel)]="usuario.surname" name="surname"
+                                readonly />
+                        </div>
+                        <div class=" d-flex">
+                            <strong>(E) Nombre Usuario: </strong>
+                            <input type="text" class="form-edit" [(ngModel)]="usuario.username" name="username">
+                            <div class="d-flex">
+                                @if (usuario.username !== nombreEditable) {
+                                <button (click)="guardarCambios()"
+                                    style="border: none; font-size: 15px; margin-left: 10px; background-color: white;">Guardar</button>
+                                <button (click)="cancelarEdicion()"
+                                    style="border: none; font-size: 15px; margin-right: 10px; background-color: white">Cancelar</button>
+                                }
+
+                            </div>
+                        </div>
+                        <div>
+                            <strong>(N) Email:</strong>
+                            <input type="email" class="form-edit" [(ngModel)]="usuario.email" name="email" readonly />
+                        </div>
+                        <div>
+                            <strong>(N) Fecha de Nacimiento:</strong>
+                            <input type="date" class="form-edit" [(ngModel)]="usuario.dt_nac" name="dt_nac" readonly />
+
+                            <div>
+                                <strong>(N) Ciudad:</strong>
+                                <input type="text" class="form-edit" [(ngModel)]="usuario.city" name="city" readonly />
+                            </div>
+                            <div>
+                                <strong>(N) Número de Teléfono:</strong>
+                                <input type="number" class="form-edit" [(ngModel)]="usuario.n_telefono"
+                                    name="n_telefono" readonly />
+                            </div>
+
+                            <div>
+                                <strong>(E) Rol:</strong>
+                                <select class="form-edit" name="role" [(ngModel)]="usuario.role.id" required>
+                                    @for (rol of listaRoles; track $index) {
+                                    <option [ngValue]="rol.id">{{ rol.name | uppercase}}</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+}
+
+
+@if (showModalConfirm) {
+<div class=".sobre-modal" [@fadeInOut]="true">
+    <div class="contenido-modal">
+        <span (click)="cerrarModalConfirm()" class="close-button"><i class="pi pi-times"></i></span>
+        <div class="modal-header">
+            <h2 class="titulo-modal text-center" style="color: blue;">Eliminar Usuario</h2>
+        </div>
+        <div class="cuerpo-modal text-center">
+            <div class=" d-flex text-center">
+                <div class="confirm">
+                    <div class="icon-question">
+                        <i class="pi pi-question"></i>
+                    </div>
+                    <h5>¿Está seguro de querer eliminar al usuario {{usuario.username}}?</h5>
+                </div>
+            </div>
+            <div class="d-flex">
+                <button style="margin-top: 50px; margin-right: 100px; margin-left: 60px; border-radius: 15px;"
+                    class="btn btn-primary" (click)="eliminarUser(usuario.id)">Confirmar</button>
+                <button style="margin-top: 50px; border-radius: 15px;" class="btn btn-danger"
+                    (click)="cerrarModalConfirm()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,21 @@
+<div class="modal" [@fadeInOut]>
+    <div class="modal-content">
+        <span class="close" style="color: #086f12;" (click)="cerrarEvento()">&times;</span>
+        <h2 class="text-center mb-5">Crear Solicitud</h2>
+        <form #solicitudForm="ngForm" (ngSubmit)="onSubmit(solicitudForm.value)" method="post">
+            <div class="form-group">
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre"
+                    [(ngModel)]="solicitudActividad.nombre" required>
+            </div>
+            <div class="form-group">
+                <textarea id="concepto" name="concepto" class="form-control" rows="4" placeholder="Concepto"
+                    [(ngModel)]="solicitudActividad.concepto" required></textarea>
+            </div>
+            <div class="form-group">
+                <input type="ciudad" id="fecha" name="ciudad" class="form-control" placeholder="Ciudad"
+                    [(ngModel)]="solicitudActividad.ciudad" required>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!solicitudForm.valid">Crear</button>
+        </form>
+    </div>
+</div>

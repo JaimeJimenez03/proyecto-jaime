@@ -1,0 +1,72 @@
+@if (usuarioLogueado != null) {
+<div class="html">
+    <div [@fadeInOut]>
+        <app-cabecera></app-cabecera>
+        <div class="tabla">
+            <p-table [value]="listaSolicitudes" dataKey="code" [paginator]="true" [rows]="5"
+                [tableStyle]="{'min-width': '50rem'}" class="table table-hover table-striped text-center">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:10%; text-align: center;">View</th>
+                        <th>Nombre</th>
+                        <th>Concepto</th>
+                        <th style="width: 15%;">Ciudad</th>
+                        <th style="width:3%"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-solicitud>
+                    <tr>
+                        <td class="text-center"><button type="button"
+                                style="border: none; background: none; text-align: center;"><i class="pi pi-eye"
+                                    style="color: blue;" (click)="abrirEdit(solicitud)"></i></button></td>
+                        <td>{{solicitud.nombre}}</td>
+                        <td>{{solicitud.concepto}}</td>
+                        <td>{{solicitud.ciudad}}</td>
+                        <td class="text-center">
+                            <button (click)="abrirModalConfirm(solicitud)"
+                                style="color: rgb(56, 189, 255); background: none; border: none;"><i
+                                    class="pi pi-minus"></i></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
+                <button class="btn btn-primary close-button" routerLink="">Volver al Incio</button>
+            </div>
+        </div>
+    </div>
+
+    @if (abrirEditSoli) {
+    <app-edit-solicitud [solicitud]="solicitud" (cerrarEdit)="cerrarEdit()"></app-edit-solicitud>
+    }
+
+</div>
+
+@if (showModalConfirm) {
+<div class=".sobre-modal" [@fadeInOut]>
+    <div class="contenido-modal">
+        <div class="modal-header">
+            <h2 class="titulo-modal text-center" style="color: blue;">Eliminar Solicitud</h2>
+        </div>
+        <div class="cuerpo-modal text-center">
+            <div class=" d-flex text-center">
+                <div class="confirm">
+                    <div class="icon-question">
+                        <i class="pi pi-question"></i>
+                    </div>
+                    <h5>¿Está seguro de querer eliminar la solicitud?</h5>
+                </div>
+            </div>
+            <div class="d-flex" style="justify-content: space-around; align-items: center;">
+                <button style="margin-top: 10%; border-radius: 15px;" class="btn btn-primary"
+                    (click)="eliminarSolicitud(solicitud.id)">Confirmar</button>
+                <button style="margin-top: 10%; border-radius: 15px;" class="btn btn-danger"
+                    (click)="cerrarModalConfirm()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+}@else {
+{{redireccion()}}
+}
